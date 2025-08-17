@@ -78,7 +78,7 @@ const EffectsPanel = ({ effects, onEffectChange, transpose, onTransposeChange, o
 {["bass", "mid", "treble"].map(band => (
               <div key={band} className="text-center">
                 <div className="text-xs text-primary-400 mb-2 capitalize">{band}</div>
-                <motion.div 
+<motion.div 
                   className="relative h-20 w-6 mx-auto bg-primary-700 rounded-full overflow-hidden"
                   whileHover={{ scale: 1.05 }}
                 >
@@ -86,10 +86,10 @@ const EffectsPanel = ({ effects, onEffectChange, transpose, onTransposeChange, o
                     className="absolute bottom-0 w-full bg-gradient-to-t from-accent-500 to-accent-400 transition-all duration-200"
                     style={{ height: `${(effects.eq[band] + 50)}%` }}
                   />
-<input
+                  <input
                     type="range"
-                    min={-50}
-                    max={50}
+                    min="-50"
+                    max="50"
                     value={effects.eq[band]}
                     onChange={(e) => onEffectChange("eq", { 
                       ...effects.eq, 

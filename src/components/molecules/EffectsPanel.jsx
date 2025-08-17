@@ -82,7 +82,7 @@ const EffectsPanel = ({ effects, onEffectChange, transpose, onTransposeChange, o
                   className="relative h-20 w-6 mx-auto bg-primary-700 rounded-full overflow-hidden"
                   whileHover={{ scale: 1.05 }}
                 >
-                  <div 
+<div 
                     className="absolute bottom-0 w-full bg-gradient-to-t from-accent-500 to-accent-400 transition-all duration-200"
                     style={{ height: `${(effects.eq[band] + 50)}%` }}
                   />

@@ -13,5 +13,5 @@ export const store = configureStore({
     }),
 });
 
-export type RootState = ReturnType<typeof store.getState>;
-export type AppDispatch = typeof store.dispatch;
+// Store is ready for use - types would go here in TypeScript
+// For JavaScript, we rely on runtime checking and IDE inference

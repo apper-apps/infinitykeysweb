@@ -1,0 +1,137 @@
+@import 'tailwindcss/base';
+@import 'tailwindcss/components';
+@import 'tailwindcss/utilities';
+@import 'react-toastify/dist/ReactToastify.css';
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #0a0a0f;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+  overflow-x: hidden;
+}
+
+#root {
+  min-height: 100vh;
+}
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #16213e;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #e94560;
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #ff6b8a;
+}
+
+/* Piano key animations */
+.key-pressed {
+  transform: scale(0.98);
+  transition: transform 50ms ease-out;
+}
+
+.key-glow {
+  box-shadow: 0 0 15px rgba(233, 69, 96, 0.8);
+  border-color: #e94560;
+}
+
+/* Beat pulse animation */
+.beat-active {
+  animation: pulse-beat 0.6s ease-in-out;
+}
+
+/* Waveform visualization */
+.waveform {
+  background: linear-gradient(45deg, #0f3460, #16213e);
+  border-radius: 4px;
+}
+
+/* Control knobs */
+.knob {
+  background: conic-gradient(from 180deg at 50% 50%, #0f3460 0deg, #e94560 var(--rotation, 0deg), #0f3460 var(--rotation, 0deg));
+  border-radius: 50%;
+  position: relative;
+}
+
+.knob::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 80%;
+  height: 80%;
+  background: #16213e;
+  border-radius: 50%;
+  transform: translate(-50%, -50%);
+}
+
+/* Toast customization */
+.Toastify__toast {
+  background: #16213e;
+  color: #ffffff;
+  border-radius: 8px;
+  border: 1px solid #0f3460;
+}
+
+.Toastify__toast--success {
+  background: linear-gradient(135deg, #00d4aa 0%, #16213e 100%);
+}
+
+.Toastify__toast--error {
+  background: linear-gradient(135deg, #ff4757 0%, #16213e 100%);
+}
+
+.Toastify__progress-bar {
+  background: #e94560;
+}
+
+.Toastify__close-button {
+  color: #ffffff;
+  opacity: 0.7;
+}
+
+.Toastify__close-button:hover {
+  opacity: 1;
+}
+
+/* Selection and focus styles */
+::selection {
+  background-color: rgba(233, 69, 96, 0.3);
+}
+
+:focus {
+  outline: 2px solid #e94560;
+  outline-offset: 2px;
+}
+
+/* Prevent text selection on piano keys */
+.piano-key {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+}

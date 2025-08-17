@@ -1,0 +1,90 @@
+[
+  {
+    "Id": 1,
+    "name": "Classical Orchestral",
+    "genre": "Classical",
+    "description": "Timpani and orchestral percussion",
+    "defaultTempo": 100,
+    "pattern": ["kick", "snare", "timpani", "cymbal"]
+  },
+  {
+    "Id": 2,
+    "name": "Jazz Swing",
+    "genre": "Jazz",
+    "description": "Brushes on snare with walking bass",
+    "defaultTempo": 120,
+    "pattern": ["brush_kick", "brush_snare", "hi_hat", "walking_bass"]
+  },
+  {
+    "Id": 3,
+    "name": "Gospel Groove",
+    "genre": "Gospel",
+    "description": "Church shuffle with choirs",
+    "defaultTempo": 95,
+    "pattern": ["gospel_kick", "snare", "tambourine", "choir_stab"]
+  },
+  {
+    "Id": 4,
+    "name": "Afrobeat Pulse",
+    "genre": "Afrobeat",
+    "description": "Talking drums and congas",
+    "defaultTempo": 110,
+    "pattern": ["djembe", "conga", "talking_drum", "shaker"]
+  },
+  {
+    "Id": 5,
+    "name": "Trap 808s",
+    "genre": "Trap",
+    "description": "Modern trap with 808 drums",
+    "defaultTempo": 140,
+    "pattern": ["808_kick", "snare", "hi_hat_roll", "clap"]
+  },
+  {
+    "Id": 6,
+    "name": "RnB Smooth",
+    "genre": "RnB",
+    "description": "Laid-back R&B groove",
+    "defaultTempo": 85,
+    "pattern": ["rnb_kick", "snare", "hi_hat", "smooth_bass"]
+  },
+  {
+    "Id": 7,
+    "name": "Latin Salsa",
+    "genre": "Latin",
+    "description": "Bongos, timbales, and claves",
+    "defaultTempo": 125,
+    "pattern": ["bongo", "timbale", "clave", "cowbell"]
+  },
+  {
+    "Id": 8,
+    "name": "Reggaeton Fire",
+    "genre": "Reggaeton",
+    "description": "Latin urban reggaeton beat",
+    "defaultTempo": 95,
+    "pattern": ["reggaeton_kick", "snare", "hi_hat", "percussion"]
+  },
+  {
+    "Id": 9,
+    "name": "Funk Pocket",
+    "genre": "Funk",
+    "description": "Tight funk groove with slap bass",
+    "defaultTempo": 105,
+    "pattern": ["funk_kick", "snare", "hi_hat", "slap_bass"]
+  },
+  {
+    "Id": 10,
+    "name": "Rock Power",
+    "genre": "Rock",
+    "description": "Stadium rock drums",
+    "defaultTempo": 130,
+    "pattern": ["rock_kick", "snare", "hi_hat", "crash"]
+  },
+  {
+    "Id": 11,
+    "name": "Lo-Fi Chill",
+    "genre": "Lo-Fi",
+    "description": "Mellow lo-fi hip-hop with vinyl crackle",
+    "defaultTempo": 75,
+    "pattern": ["lofi_kick", "snare", "vinyl_crackle", "atmospheric"]
+  }
+]

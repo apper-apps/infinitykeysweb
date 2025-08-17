@@ -1,0 +1,162 @@
+[
+  {
+    "Id": 1,
+    "name": "Concert Grand",
+    "category": "Grand Piano",
+    "description": "Yamaha CFX concert grand piano",
+    "icon": "Piano",
+    "audioFile": "grand_piano.wav"
+  },
+  {
+    "Id": 2,
+    "name": "Roland Concert Grand",
+    "category": "Grand Piano", 
+    "description": "Premium concert grand sound",
+    "icon": "Music",
+    "audioFile": "roland_grand.wav"
+  },
+  {
+    "Id": 3,
+    "name": "Bösendorfer Imperial",
+    "category": "Grand Piano",
+    "description": "Legendary Austrian grand piano",
+    "icon": "Piano",
+    "audioFile": "bosendorfer.wav"
+  },
+  {
+    "Id": 4,
+    "name": "Vintage Upright",
+    "category": "Upright Piano",
+    "description": "Classic upright piano sound",
+    "icon": "Music2",
+    "audioFile": "upright_vintage.wav"
+  },
+  {
+    "Id": 5,
+    "name": "Studio Upright",
+    "category": "Upright Piano",
+    "description": "Modern studio upright piano",
+    "icon": "Music3",
+    "audioFile": "upright_studio.wav"
+  },
+  {
+    "Id": 6,
+    "name": "Honky-Tonk",
+    "category": "Upright Piano",
+    "description": "Saloon-style honky-tonk piano",
+    "icon": "Music4",
+    "audioFile": "honky_tonk.wav"
+  },
+  {
+    "Id": 7,
+    "name": "Yamaha CP Stage",
+    "category": "Stage Piano",
+    "description": "Professional stage piano",
+    "icon": "Piano",
+    "audioFile": "yamaha_cp.wav"
+  },
+  {
+    "Id": 8,
+    "name": "Roland RD-2000",
+    "category": "Stage Piano",
+    "description": "Premium stage piano sound",
+    "icon": "Music",
+    "audioFile": "roland_rd.wav"
+  },
+  {
+    "Id": 9,
+    "name": "Nord Stage 4",
+    "category": "Stage Piano",
+    "description": "Swedish stage piano excellence",
+    "icon": "Music2",
+    "audioFile": "nord_stage.wav"
+  },
+  {
+    "Id": 10,
+    "name": "Rhodes Classic",
+    "category": "Electric Piano",
+    "description": "Vintage Fender Rhodes electric piano",
+    "icon": "Zap",
+    "audioFile": "rhodes.wav"
+  },
+  {
+    "Id": 11,
+    "name": "Wurlitzer 200A",
+    "category": "Electric Piano",
+    "description": "Classic Wurlitzer electric piano",
+    "icon": "Zap",
+    "audioFile": "wurlitzer.wav"
+  },
+  {
+    "Id": 12,
+    "name": "DX7 Electric",
+    "category": "Electric Piano",
+    "description": "Yamaha DX7 FM electric piano",
+    "icon": "Zap",
+    "audioFile": "dx7_ep.wav"
+  },
+  {
+    "Id": 13,
+    "name": "Clavinet D6",
+    "category": "Electric Piano",
+    "description": "Hohner Clavinet funky sound",
+    "icon": "Zap",
+    "audioFile": "clavinet.wav"
+  },
+  {
+    "Id": 14,
+    "name": "Piano + Strings",
+    "category": "Hybrid Keys",
+    "description": "Grand piano layered with strings",
+    "icon": "Layers",
+    "audioFile": "piano_strings.wav"
+  },
+  {
+    "Id": 15,
+    "name": "Piano + Choir",
+    "category": "Hybrid Keys",
+    "description": "Piano with ethereal choir pad",
+    "icon": "Layers",
+    "audioFile": "piano_choir.wav"
+  },
+  {
+    "Id": 16,
+    "name": "Cinematic Keys",
+    "category": "Hybrid Keys",
+    "description": "Piano with cinematic textures",
+    "icon": "Layers",
+    "audioFile": "cinematic_keys.wav"
+  },
+  {
+    "Id": 17,
+    "name": "Kalimba Piano",
+    "category": "Special Keys",
+    "description": "African kalimba-piano fusion",
+    "icon": "Sparkles",
+    "audioFile": "kalimba_piano.wav"
+  },
+  {
+    "Id": 18,
+    "name": "Koto Keys",
+    "category": "Special Keys",
+    "description": "Japanese koto with piano",
+    "icon": "Sparkles",
+    "audioFile": "koto_keys.wav"
+  },
+  {
+    "Id": 19,
+    "name": "Balafon Keys",
+    "category": "Special Keys",
+    "description": "African balafon-piano hybrid",
+    "icon": "Sparkles",
+    "audioFile": "balafon_keys.wav"
+  },
+  {
+    "Id": 20,
+    "name": "Cathedral Organ",
+    "category": "Pipe Organ",
+    "description": "Majestic cathedral pipe organ",
+    "icon": "Church",
+    "audioFile": "cathedral_organ.wav"
+  }
+]

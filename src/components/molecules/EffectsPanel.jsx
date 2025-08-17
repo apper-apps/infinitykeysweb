@@ -86,7 +86,7 @@ const EffectsPanel = ({ effects, onEffectChange, transpose, onTransposeChange, o
                     className="absolute bottom-0 w-full bg-gradient-to-t from-accent-500 to-accent-400 transition-all duration-200"
                     style={{ height: `${(effects.eq[band] + 50)}%` }}
                   />
-                  <input
+<input
                     type="range"
                     min={-50}
                     max={50}
@@ -96,7 +96,6 @@ const EffectsPanel = ({ effects, onEffectChange, transpose, onTransposeChange, o
                       [band]: Number(e.target.value) 
                     })}
                     className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
-                    orient="vertical"
                   />
                 </motion.div>
                 <div className="text-xs text-primary-300 mt-1">

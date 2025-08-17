@@ -32,6 +32,11 @@ const StudioPage = () => {
   const [currentChord, setCurrentChord] = useState("");
   const [suggestedChords, setSuggestedChords] = useState([]);
 
+  // Keyboard states
+  const [keyboardLayout] = useState("azerty");
+  const [currentOctave, setCurrentOctave] = useState(4);
+  const [keyboardEnabled, setKeyboardEnabled] = useState(true);
+
   // Effects states
   const [effects, setEffects] = useState({
     reverb: { type: "hall", value: 25 },
@@ -89,7 +94,7 @@ const StudioPage = () => {
     return () => clearInterval(interval);
   }, [isRecording]);
 
-  // Beat tempo sync
+// Beat tempo sync
   useEffect(() => {
     if (selectedBeat && isBeatPlaying) {
       // Simulate beat sync
@@ -100,6 +105,29 @@ const StudioPage = () => {
       return () => clearInterval(interval);
     }
   }, [selectedBeat, isBeatPlaying, tempo]);
+
+  // Keyboard focus management
+  useEffect(() => {
+    const handleFocus = () => setKeyboardEnabled(true);
+    const handleBlur = () => setKeyboardEnabled(false);
+    
+    window.addEventListener('focus', handleFocus);
+    window.addEventListener('blur', handleBlur);
+    
+    return () => {
+      window.removeEventListener('focus', handleFocus);
+      window.removeEventListener('blur', handleBlur);
+    };
+  }, []);
+
+  // Toast notification for octave changes
+  useEffect(() => {
+    if (currentOctave !== 4) {
+      toast.info(`Piano octave set to ${currentOctave}`, {
+        icon: "🎹"
+      });
+    }
+  }, [currentOctave]);
 
   const handleSoundSelect = async (sound) => {
     try {
@@ -133,7 +161,12 @@ const StudioPage = () => {
     });
   };
 
-  const handleKeyPress = (key) => {
+const handleKeyPress = (key) => {
+    if (!selectedSound) {
+      toast.warning("Select an instrument first");
+      return;
+    }
+    
     setPressedKeys(prev => [...prev.filter(k => k !== key.id), key.id]);
     
     // Simulate chord detection
@@ -141,6 +174,12 @@ const StudioPage = () => {
       const chords = ["C", "Dm", "Em", "F", "G", "Am", "B°"];
       setCurrentChord(chords[Math.floor(Math.random() * chords.length)]);
       setSuggestedChords(["F", "Am", "G"]);
+    }
+    
+    // Visual feedback for keyboard input
+    if (keyboardEnabled) {
+      // Simulate sound playing
+      console.log(`Playing ${key.note}${key.octave} with ${selectedSound.name}`);
     }
   };
 
@@ -150,6 +189,10 @@ const StudioPage = () => {
       setCurrentChord("");
       setSuggestedChords([]);
     }
+  };
+
+  const handleOctaveChange = (newOctave) => {
+    setCurrentOctave(newOctave);
   };
 
   const handleEffectChange = (effectType, value) => {
@@ -321,12 +364,15 @@ const StudioPage = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
         >
-          <PianoKeyboard
+<PianoKeyboard
             onKeyPress={handleKeyPress}
             onKeyRelease={handleKeyRelease}
             pressedKeys={pressedKeys}
             octaveRange={7}
             highlightedKeys={[]}
+            keyboardLayout={keyboardLayout}
+            currentOctave={currentOctave}
+            onOctaveChange={handleOctaveChange}
           />
         </motion.div>
 

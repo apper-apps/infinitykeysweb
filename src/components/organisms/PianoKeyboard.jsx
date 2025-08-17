@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
 import Card from "@/components/atoms/Card";
 import ApperIcon from "@/components/ApperIcon";
@@ -8,7 +8,10 @@ const PianoKeyboard = ({
   onKeyRelease, 
   pressedKeys = [], 
   octaveRange = 7,
-  highlightedKeys = [] 
+  highlightedKeys = [],
+  keyboardLayout = "azerty",
+  currentOctave = 4,
+  onOctaveChange
 }) => {
   const [touchedKeys, setTouchedKeys] = useState(new Set());
 
@@ -18,7 +21,7 @@ const PianoKeyboard = ({
     const whiteKeyPattern = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
     const blackKeyPattern = ['C#', 'D#', null, 'F#', 'G#', 'A#', null];
     
-    for (let octave = 2; octave < 2 + octaveRange; octave++) {
+for (let octave = 2; octave < 2 + octaveRange; octave++) {
       whiteKeyPattern.forEach((note, index) => {
         const keyId = `${note}${octave}`;
         keys.push({
@@ -43,12 +46,78 @@ const PianoKeyboard = ({
       });
     }
     
-    return keys.filter(key => key !== null);
+return keys.filter(key => key !== null);
+  };
+
+  // Keyboard mapping for AZERTY layout
+  const getKeyboardMapping = () => {
+    const azertyKeys = ['q', 'z', 's', 'e', 'd', 'f', 't', 'g', 'y', 'h', 'u', 'j', 'k', 'o', 'l', 'p', 'm', 'ù', '$'];
+    const notePattern = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+    
+    const mapping = {};
+    azertyKeys.forEach((key, index) => {
+      if (index < notePattern.length + 7) { // Support 19 keys for extended range
+        const noteIndex = index % 12;
+        const octaveOffset = Math.floor(index / 12);
+        const note = notePattern[noteIndex];
+        const octave = currentOctave + octaveOffset;
+        mapping[key] = `${note}${octave}`;
+      }
+    });
+    
+    return mapping;
   };
 
   const keys = generateKeys();
   const whiteKeys = keys.filter(key => key.type === 'white');
   const blackKeys = keys.filter(key => key.type === 'black');
+  const keyboardMapping = getKeyboardMapping();
+
+  // Handle keyboard events
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.repeat) return;
+      
+      const mappedKeyId = keyboardMapping[e.key.toLowerCase()];
+      if (mappedKeyId) {
+        const key = keys.find(k => k.id === mappedKeyId);
+        if (key) {
+          setTouchedKeys(prev => new Set([...prev, key.id]));
+          onKeyPress?.(key);
+        }
+      }
+      
+      // Octave controls
+      if (e.key === 'ArrowUp' && currentOctave < 7) {
+        onOctaveChange?.(currentOctave + 1);
+      } else if (e.key === 'ArrowDown' && currentOctave > 1) {
+        onOctaveChange?.(currentOctave - 1);
+      }
+    };
+
+    const handleKeyUp = (e) => {
+      const mappedKeyId = keyboardMapping[e.key.toLowerCase()];
+      if (mappedKeyId) {
+        const key = keys.find(k => k.id === mappedKeyId);
+        if (key) {
+          setTouchedKeys(prev => {
+            const newSet = new Set(prev);
+            newSet.delete(key.id);
+            return newSet;
+          });
+          onKeyRelease?.(key);
+        }
+      }
+    };
+
+    window.addEventListener('keydown', handleKeyDown);
+    window.addEventListener('keyup', handleKeyUp);
+    
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
+      window.removeEventListener('keyup', handleKeyUp);
+    };
+  }, [keys, keyboardMapping, currentOctave, onKeyPress, onKeyRelease, onOctaveChange]);
 
   const handleKeyDown = useCallback((key) => {
     setTouchedKeys(prev => new Set([...prev, key.id]));
@@ -72,7 +141,7 @@ const PianoKeyboard = ({
     return highlightedKeys.includes(keyId);
   };
 
-  return (
+return (
     <Card className="p-6">
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center space-x-3">
@@ -81,13 +150,29 @@ const PianoKeyboard = ({
           </div>
           <div>
             <h3 className="text-lg font-display font-bold text-white">88-Key Piano</h3>
-            <p className="text-sm text-primary-300">{octaveRange} octave range • Velocity sensitive</p>
+            <p className="text-sm text-primary-300">{octaveRange} octave range • Octave {currentOctave}</p>
           </div>
         </div>
         
-        <div className="text-right text-xs text-primary-400">
-          <div>Multi-touch support</div>
-          <div>Press keys to play</div>
+        <div className="flex items-center space-x-4">
+          <div className="text-right text-xs text-primary-400">
+            <div>Keyboard: AZERTY</div>
+            <div>↑↓ for octaves</div>
+          </div>
+          <div className="flex flex-col space-y-1">
+            <button
+              onClick={() => onOctaveChange?.(Math.min(currentOctave + 1, 7))}
+              className="px-2 py-1 bg-primary-700 hover:bg-primary-600 rounded text-xs text-white"
+            >
+              ↑ Oct
+            </button>
+            <button
+              onClick={() => onOctaveChange?.(Math.max(currentOctave - 1, 1))}
+              className="px-2 py-1 bg-primary-700 hover:bg-primary-600 rounded text-xs text-white"
+            >
+              ↓ Oct
+            </button>
+          </div>
         </div>
       </div>
 
@@ -177,7 +262,7 @@ const PianoKeyboard = ({
           </div>
         </div>
 
-        <div className="flex items-center justify-center mt-4 space-x-6 text-xs text-primary-400">
+<div className="flex items-center justify-center mt-4 space-x-6 text-xs text-primary-400">
           <div className="flex items-center space-x-2">
             <div className="w-3 h-3 bg-gradient-to-br from-accent-500 to-accent-400 rounded-full" />
             <span>Active note</span>
@@ -187,8 +272,11 @@ const PianoKeyboard = ({
             <span>Scale highlight</span>
           </div>
           <div className="flex items-center space-x-2">
-            <ApperIcon name="Hand" size={12} />
-            <span>Touch & mouse support</span>
+            <ApperIcon name="Keyboard" size={12} />
+            <span>Computer keyboard + touch</span>
+          </div>
+          <div className="text-xs text-primary-500">
+            q-z-s-e-d-f-t-g-y-h-u-j-k-o-l-p-m-ù-$ → C-C#-D-D#-E-F-F#-G-G#-A-A#-B-C-C#-D-D#-E-F-F#-G
           </div>
         </div>
       </div>

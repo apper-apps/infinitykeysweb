@@ -3,10 +3,10 @@ import { cn } from "@/utils/cn";
 
 const Card = forwardRef(({ children, className = "", ...props }, ref) => {
   return (
-    <div
+<div
       ref={ref}
       className={cn(
-        "bg-gradient-to-br from-primary-600/40 to-primary-700/20 backdrop-blur-md border border-primary-600/30 rounded-xl shadow-xl",
+        "bg-white/10 backdrop-blur-xl border border-white/20 rounded-xl shadow-2xl hover:shadow-3xl transition-all duration-300 hover:bg-white/15",
         className
       )}
       {...props}

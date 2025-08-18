@@ -7,14 +7,16 @@ import BeatControl from "@/components/molecules/BeatControl";
 import EffectsPanel from "@/components/molecules/EffectsPanel";
 import RecordingToolbar from "@/components/molecules/RecordingToolbar";
 import ChordDisplay from "@/components/molecules/ChordDisplay";
+import ThemeSelector from "@/components/molecules/ThemeSelector";
 import Loading from "@/components/ui/Loading";
 import Error from "@/components/ui/Error";
 import ApperIcon from "@/components/ApperIcon";
 import * as soundService from "@/services/api/soundService";
 import * as beatService from "@/services/api/beatService";
-
+import { themes, getTheme, saveTheme, loadTheme } from "@/utils/themes";
+import { detectKeyboardLayout } from "@/utils/keyboardLayouts";
 const StudioPage = () => {
-  // Data states
+// Data states
   const [sounds, setSounds] = useState([]);
   const [beats, setBeats] = useState([]);
   const [recordings, setRecordings] = useState([]);
@@ -33,9 +35,12 @@ const StudioPage = () => {
   const [suggestedChords, setSuggestedChords] = useState([]);
 
   // Keyboard states
-  const [keyboardLayout] = useState("azerty");
+  const [keyboardLayout, setKeyboardLayout] = useState(detectKeyboardLayout());
   const [currentOctave, setCurrentOctave] = useState(4);
   const [keyboardEnabled, setKeyboardEnabled] = useState(true);
+
+  // Theme states
+  const [currentTheme, setCurrentTheme] = useState(getTheme(loadTheme()));
 
   // Effects states
   const [effects, setEffects] = useState({
@@ -51,7 +56,6 @@ const StudioPage = () => {
   const [recordingTime, setRecordingTime] = useState(0);
   const [hasRecording, setHasRecording] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
-
   // Load initial data
   useEffect(() => {
     const loadStudioData = async () => {
@@ -248,8 +252,26 @@ const handleKeyPress = (key) => {
   if (loading) return <Loading />;
   if (error) return <Error message={error} onRetry={() => window.location.reload()} />;
 
+const handleThemeChange = (theme) => {
+    setCurrentTheme(theme);
+    saveTheme(theme.id);
+    toast.success(`Theme changed to ${theme.name}`, {
+      icon: "🎨"
+    });
+  };
+
+  const handleLayoutChange = (layout) => {
+    setKeyboardLayout(layout);
+    toast.success(`Keyboard layout: ${layout.toUpperCase()}`, {
+      icon: "⌨️"
+    });
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-primary-800 via-primary-500 to-primary-600 p-4">
+    <div 
+      className="min-h-screen p-4 transition-all duration-500"
+      style={{ background: currentTheme.colors.background }}
+    >
       <div className="max-w-7xl mx-auto space-y-6">
         {/* Header */}
         <motion.div 
@@ -257,26 +279,39 @@ const handleKeyPress = (key) => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center space-y-4"
         >
-          <div className="flex items-center justify-center space-x-3">
-            <motion.div
-              animate={{ 
-                rotate: [0, 360],
-                scale: [1, 1.1, 1]
-              }}
-              transition={{ 
-                duration: 8, 
-                repeat: Infinity,
-                ease: "easeInOut"
-              }}
-              className="p-3 bg-gradient-to-br from-accent-500 to-accent-400 rounded-xl shadow-lg"
-            >
-              <ApperIcon name="Music" size={32} className="text-white" />
-            </motion.div>
-            <div>
-              <h1 className="text-4xl font-display font-bold text-white">
-                Infinity Keys
-              </h1>
-              <p className="text-primary-300">Professional Music Production Studio</p>
+          <div className="flex items-center justify-between">
+            <div className="flex items-center justify-center space-x-3 flex-1">
+              <motion.div
+                animate={{ 
+                  rotate: [0, 360],
+                  scale: [1, 1.1, 1]
+                }}
+                transition={{ 
+                  duration: 8, 
+                  repeat: Infinity,
+                  ease: "easeInOut"
+                }}
+                className="p-3 rounded-xl shadow-2xl"
+                style={{ 
+                  background: `linear-gradient(135deg, ${currentTheme.colors.primary}, ${currentTheme.colors.accent})`
+                }}
+              >
+                <ApperIcon name="Music" size={32} className="text-white" />
+              </motion.div>
+              <div>
+                <h1 className="text-4xl font-display font-bold text-white drop-shadow-lg">
+                  Infinity Keys
+                </h1>
+                <p className="text-white/80">Professional Music Production Studio</p>
+              </div>
+            </div>
+            
+            <div className="flex items-center space-x-4">
+              <ThemeSelector 
+                currentTheme={currentTheme}
+                onThemeChange={handleThemeChange}
+                themes={themes}
+              />
             </div>
           </div>
         </motion.div>
@@ -364,7 +399,7 @@ const handleKeyPress = (key) => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.6 }}
         >
-<PianoKeyboard
+          <PianoKeyboard
             onKeyPress={handleKeyPress}
             onKeyRelease={handleKeyRelease}
             pressedKeys={pressedKeys}
@@ -373,6 +408,8 @@ const handleKeyPress = (key) => {
             keyboardLayout={keyboardLayout}
             currentOctave={currentOctave}
             onOctaveChange={handleOctaveChange}
+            theme={currentTheme}
+            onLayoutChange={handleLayoutChange}
           />
         </motion.div>
 
@@ -381,18 +418,33 @@ const handleKeyPress = (key) => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.7 }}
-          className="flex items-center justify-center space-x-8 text-sm text-primary-400"
+          className="flex items-center justify-center space-x-8 text-sm text-white/70"
         >
           <div className="flex items-center space-x-2">
-            <div className={`w-2 h-2 rounded-full ${selectedSound ? 'bg-success' : 'bg-primary-600'}`} />
+            <div 
+              className="w-2 h-2 rounded-full shadow-lg"
+              style={{ 
+                backgroundColor: selectedSound ? currentTheme.colors.accent : '#6b7280'
+              }}
+            />
             <span>Instrument: {selectedSound?.name || "None"}</span>
           </div>
           <div className="flex items-center space-x-2">
-            <div className={`w-2 h-2 rounded-full ${isBeatPlaying ? 'bg-accent-500 animate-pulse' : 'bg-primary-600'}`} />
+            <div 
+              className={`w-2 h-2 rounded-full shadow-lg ${isBeatPlaying ? 'animate-pulse' : ''}`}
+              style={{ 
+                backgroundColor: isBeatPlaying ? currentTheme.colors.keyActive : '#6b7280'
+              }}
+            />
             <span>Beat: {selectedBeat ? `${selectedBeat.name} @ ${tempo} BPM` : "None"}</span>
           </div>
           <div className="flex items-center space-x-2">
-            <div className={`w-2 h-2 rounded-full ${isRecording ? 'bg-error animate-pulse' : hasRecording ? 'bg-success' : 'bg-primary-600'}`} />
+            <div 
+              className={`w-2 h-2 rounded-full shadow-lg ${isRecording ? 'animate-pulse' : ''}`}
+              style={{ 
+                backgroundColor: isRecording ? '#ef4444' : hasRecording ? '#10b981' : '#6b7280'
+              }}
+            />
             <span>Recording: {isRecording ? "Active" : hasRecording ? "Ready" : "None"}</span>
           </div>
         </motion.div>

@@ -11,7 +11,9 @@ const PianoKeyboard = ({
   highlightedKeys = [],
   keyboardLayout = "azerty",
   currentOctave = 4,
-  onOctaveChange
+  onOctaveChange,
+  theme,
+  onLayoutChange
 }) => {
   const [touchedKeys, setTouchedKeys] = useState(new Set());
 
@@ -50,12 +52,14 @@ return keys.filter(key => key !== null);
   };
 
   // Keyboard mapping for AZERTY layout
-  const getKeyboardMapping = () => {
-    const azertyKeys = ['q', 'z', 's', 'e', 'd', 'f', 't', 'g', 'y', 'h', 'u', 'j', 'k', 'o', 'l', 'p', 'm', 'ù', '$'];
+const getKeyboardMapping = () => {
+    const { keyboardLayouts, getLayoutKeys } = require('@/utils/keyboardLayouts');
+    const layoutConfig = getLayoutKeys(keyboardLayout);
+    const layoutKeys = layoutConfig.keys;
     const notePattern = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
     
     const mapping = {};
-    azertyKeys.forEach((key, index) => {
+    layoutKeys.forEach((key, index) => {
       if (index < notePattern.length + 7) { // Support 19 keys for extended range
         const noteIndex = index % 12;
         const octaveOffset = Math.floor(index / 12);
@@ -72,7 +76,8 @@ return keys.filter(key => key !== null);
   const whiteKeys = keys.filter(key => key.type === 'white');
   const blackKeys = keys.filter(key => key.type === 'black');
   const keyboardMapping = getKeyboardMapping();
-
+  const { keyboardLayouts, getLayoutKeys } = require('@/utils/keyboardLayouts');
+  const layoutConfig = getLayoutKeys(keyboardLayout);
   // Handle keyboard events
   useEffect(() => {
     const handleKeyDown = (e) => {
@@ -142,33 +147,55 @@ return keys.filter(key => key !== null);
   };
 
 return (
-    <Card className="p-6">
+    <Card className="p-6" style={{ background: theme?.colors.cardBg }}>
       <div className="flex items-center justify-between mb-4">
         <div className="flex items-center space-x-3">
-          <div className="p-2 bg-gradient-to-br from-accent-500/20 to-info/20 rounded-lg">
-            <ApperIcon name="Piano" size={20} className="text-accent-400" />
+          <div 
+            className="p-2 rounded-lg shadow-lg"
+            style={{ 
+              background: `linear-gradient(135deg, ${theme?.colors.primary}, ${theme?.colors.accent})`
+            }}
+          >
+            <ApperIcon name="Piano" size={20} className="text-white" />
           </div>
           <div>
             <h3 className="text-lg font-display font-bold text-white">88-Key Piano</h3>
-            <p className="text-sm text-primary-300">{octaveRange} octave range • Octave {currentOctave}</p>
+            <p className="text-sm text-white/70">{octaveRange} octave range • Octave {currentOctave}</p>
           </div>
         </div>
         
         <div className="flex items-center space-x-4">
-          <div className="text-right text-xs text-primary-400">
-            <div>Keyboard: AZERTY</div>
+          <div className="text-right text-xs text-white/60 space-y-1">
+            <div>Layout: {layoutConfig.name}</div>
             <div>↑↓ for octaves</div>
+          </div>
+<div className="flex items-center space-x-2">
+            <select
+              value={keyboardLayout}
+              onChange={(e) => onLayoutChange?.(e.target.value)}
+              className="px-2 py-1 bg-white/10 border border-white/20 rounded text-xs text-white backdrop-blur-sm focus:outline-none focus:ring-2 focus:ring-white/30"
+            >
+              {Object.entries(keyboardLayouts).map(([id, layout]) => (
+                <option key={id} value={id} className="bg-gray-800">{layout.name}</option>
+              ))}
+            </select>
           </div>
           <div className="flex flex-col space-y-1">
             <button
               onClick={() => onOctaveChange?.(Math.min(currentOctave + 1, 7))}
-              className="px-2 py-1 bg-primary-700 hover:bg-primary-600 rounded text-xs text-white"
+              className="px-2 py-1 rounded text-xs text-white transition-all hover:scale-105"
+              style={{ 
+                background: `linear-gradient(135deg, ${theme?.colors.primary}, ${theme?.colors.accent})` 
+              }}
             >
               ↑ Oct
             </button>
             <button
               onClick={() => onOctaveChange?.(Math.max(currentOctave - 1, 1))}
-              className="px-2 py-1 bg-primary-700 hover:bg-primary-600 rounded text-xs text-white"
+              className="px-2 py-1 rounded text-xs text-white transition-all hover:scale-105"
+              style={{ 
+                background: `linear-gradient(135deg, ${theme?.colors.primary}, ${theme?.colors.accent})` 
+              }}
             >
               ↓ Oct
             </button>
@@ -176,22 +203,39 @@ return (
         </div>
       </div>
 
-      <div className="relative bg-gradient-to-b from-primary-800 to-primary-900 rounded-xl p-4 overflow-x-auto">
+<div 
+        className="relative rounded-xl p-4 overflow-x-auto shadow-2xl"
+        style={{ 
+          background: `linear-gradient(145deg, ${theme?.colors.primary}20, ${theme?.colors.accent}10)`,
+          border: `1px solid ${theme?.colors.primary}30`
+        }}
+      >
         <div className="relative inline-flex" style={{ minWidth: '800px' }}>
           {/* White keys */}
           <div className="flex">
             {whiteKeys.map((key) => (
               <motion.button
                 key={key.id}
-                className={`piano-key relative w-8 h-32 mx-px bg-gradient-to-b border-r border-primary-600 rounded-b-md transition-all duration-75 ${
+                className={`piano-key relative w-8 h-32 mx-px bg-gradient-to-b border-r rounded-b-md transition-all duration-75 ${
                   isKeyPressed(key.id) 
-                    ? 'from-accent-400 to-accent-500 key-pressed key-glow shadow-lg' 
+                    ? 'key-pressed shadow-lg transform scale-95' 
                     : isKeyHighlighted(key.id)
-                      ? 'from-info/20 to-info/40 border-info'
+                      ? 'shadow-md'
                       : 'from-gray-100 to-gray-200 hover:from-gray-50 hover:to-gray-100'
                 } ${
-                  isKeyPressed(key.id) ? 'text-white' : 'text-primary-800'
+                  isKeyPressed(key.id) ? 'text-white' : 'text-gray-800'
                 }`}
+                style={{
+                  ...(isKeyPressed(key.id) && {
+                    background: `linear-gradient(to bottom, ${theme?.colors.keyActive}, ${theme?.colors.accent})`,
+                    boxShadow: `0 0 20px ${theme?.colors.keyActive}60`
+                  }),
+                  ...(isKeyHighlighted(key.id) && !isKeyPressed(key.id) && {
+                    background: `linear-gradient(to bottom, ${theme?.colors.keyHighlight}40, ${theme?.colors.keyHighlight}20)`,
+                    borderColor: theme?.colors.keyHighlight
+                  }),
+                  borderColor: isKeyPressed(key.id) ? theme?.colors.keyActive : '#e5e7eb'
+                }}
                 onMouseDown={() => handleKeyDown(key)}
                 onMouseUp={() => handleKeyUp(key)}
                 onMouseLeave={() => handleKeyUp(key)}
@@ -203,11 +247,11 @@ return (
                   e.preventDefault();
                   handleKeyUp(key);
                 }}
-                whileHover={{ scale: 1.02 }}
+                whileHover={{ scale: 1.02, y: -2 }}
                 whileTap={{ scale: 0.98 }}
               >
                 <div className="absolute bottom-2 inset-x-0 text-center">
-                  <div className="text-xs font-medium">
+                  <div className="text-xs font-bold">
                     {key.note}{key.octave}
                   </div>
                 </div>
@@ -229,13 +273,24 @@ return (
               return (
                 <div key={`container-${whiteKey.id}`} className="relative w-8 mx-px">
                   <motion.button
-                    className={`piano-key absolute right-0 w-5 h-20 -mr-2.5 bg-gradient-to-b rounded-b-md border border-primary-700 pointer-events-auto transition-all duration-75 ${
+                    className={`piano-key absolute right-0 w-5 h-20 -mr-2.5 bg-gradient-to-b rounded-b-md border pointer-events-auto transition-all duration-75 ${
                       isKeyPressed(blackKey.id) 
-                        ? 'from-accent-500 to-accent-600 key-pressed key-glow shadow-lg' 
+                        ? 'key-pressed shadow-lg transform scale-95' 
                         : isKeyHighlighted(blackKey.id)
-                          ? 'from-info/40 to-info/60 border-info'
-                          : 'from-primary-900 to-primary-800 hover:from-primary-800 hover:to-primary-700'
+                          ? 'shadow-md'
+                          : 'from-gray-900 to-gray-800 hover:from-gray-800 hover:to-gray-700'
                     }`}
+                    style={{
+                      ...(isKeyPressed(blackKey.id) && {
+                        background: `linear-gradient(to bottom, ${theme?.colors.keyActive}, ${theme?.colors.accent}cc)`,
+                        boxShadow: `0 0 20px ${theme?.colors.keyActive}80`
+                      }),
+                      ...(isKeyHighlighted(blackKey.id) && !isKeyPressed(blackKey.id) && {
+                        background: `linear-gradient(to bottom, ${theme?.colors.keyHighlight}60, ${theme?.colors.keyHighlight}40)`,
+                        borderColor: theme?.colors.keyHighlight
+                      }),
+                      borderColor: isKeyPressed(blackKey.id) ? theme?.colors.keyActive : '#374151'
+                    }}
                     onMouseDown={() => handleKeyDown(blackKey)}
                     onMouseUp={() => handleKeyUp(blackKey)}
                     onMouseLeave={() => handleKeyUp(blackKey)}
@@ -247,11 +302,11 @@ return (
                       e.preventDefault();
                       handleKeyUp(blackKey);
                     }}
-                    whileHover={{ scale: 1.05 }}
+                    whileHover={{ scale: 1.05, y: -1 }}
                     whileTap={{ scale: 0.95 }}
                   >
                     <div className="absolute bottom-1 inset-x-0 text-center">
-                      <div className="text-xs font-medium text-white opacity-75">
+                      <div className="text-xs font-bold text-white">
                         {blackKey.note.replace('#', '♯')}{blackKey.octave}
                       </div>
                     </div>
@@ -262,21 +317,31 @@ return (
           </div>
         </div>
 
-<div className="flex items-center justify-center mt-4 space-x-6 text-xs text-primary-400">
+<div className="flex items-center justify-center mt-4 space-x-6 text-xs text-white/70">
           <div className="flex items-center space-x-2">
-            <div className="w-3 h-3 bg-gradient-to-br from-accent-500 to-accent-400 rounded-full" />
+            <div 
+              className="w-3 h-3 rounded-full shadow-md"
+              style={{ 
+                background: `linear-gradient(45deg, ${theme?.colors.keyActive}, ${theme?.colors.accent})`
+              }}
+            />
             <span>Active note</span>
           </div>
           <div className="flex items-center space-x-2">
-            <div className="w-3 h-3 bg-gradient-to-br from-info to-info/60 rounded-full" />
+            <div 
+              className="w-3 h-3 rounded-full shadow-md"
+              style={{ 
+                background: `linear-gradient(45deg, ${theme?.colors.keyHighlight}, ${theme?.colors.primary})`
+              }}
+            />
             <span>Scale highlight</span>
           </div>
           <div className="flex items-center space-x-2">
             <ApperIcon name="Keyboard" size={12} />
             <span>Computer keyboard + touch</span>
           </div>
-          <div className="text-xs text-primary-500">
-            q-z-s-e-d-f-t-g-y-h-u-j-k-o-l-p-m-ù-$ → C-C#-D-D#-E-F-F#-G-G#-A-A#-B-C-C#-D-D#-E-F-F#-G
+          <div className="text-xs text-white/50 max-w-xl">
+            {layoutConfig.display} → C-C#-D-D#-E-F-F#-G-G#-A-A#-B-C-C#-D-D#-E-F-F#-G
           </div>
         </div>
       </div>

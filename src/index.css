@@ -20,7 +20,7 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background: linear-gradient(135deg, #0a0a0f 0%, #1a1a2e 100%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
   overflow-x: hidden;
 }
 
@@ -40,23 +40,23 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #e94560;
+  background: linear-gradient(45deg, #ff6b8a, #ff9a9e);
   border-radius: 4px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #ff6b8a;
+  background: linear-gradient(45deg, #ff9a9e, #fecfef);
 }
 
 /* Piano key animations */
 .key-pressed {
-  transform: scale(0.98);
-  transition: transform 50ms ease-out;
+  transform: scale(0.95) translateY(2px);
+  transition: all 100ms ease-out;
 }
 
 .key-glow {
-  box-shadow: 0 0 15px rgba(233, 69, 96, 0.8);
-  border-color: #e94560;
+  box-shadow: 0 0 25px rgba(255, 107, 138, 0.8), 0 0 50px rgba(255, 107, 138, 0.4);
+  border-color: #ff6b8a;
 }
 
 /* Beat pulse animation */
@@ -91,22 +91,31 @@ body {
 
 /* Toast customization */
 .Toastify__toast {
-  background: #16213e;
+  background: rgba(255, 255, 255, 0.15);
   color: #ffffff;
-  border-radius: 8px;
-  border: 1px solid #0f3460;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .Toastify__toast--success {
-  background: linear-gradient(135deg, #00d4aa 0%, #16213e 100%);
+  background: linear-gradient(135deg, #10b981 0%, rgba(16, 185, 129, 0.1) 100%);
+  border: 1px solid rgba(16, 185, 129, 0.3);
 }
 
 .Toastify__toast--error {
-  background: linear-gradient(135deg, #ff4757 0%, #16213e 100%);
+  background: linear-gradient(135deg, #ef4444 0%, rgba(239, 68, 68, 0.1) 100%);
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.Toastify__toast--info {
+  background: linear-gradient(135deg, #3b82f6 0%, rgba(59, 130, 246, 0.1) 100%);
+  border: 1px solid rgba(59, 130, 246, 0.3);
 }
 
 .Toastify__progress-bar {
-  background: #e94560;
+  background: linear-gradient(90deg, #ff6b8a, #ff9a9e);
 }
 
 .Toastify__close-button {
@@ -120,11 +129,11 @@ body {
 
 /* Selection and focus styles */
 ::selection {
-  background-color: rgba(233, 69, 96, 0.3);
+  background-color: rgba(255, 107, 138, 0.4);
 }
 
 :focus {
-  outline: 2px solid #e94560;
+  outline: 2px solid #ff6b8a;
   outline-offset: 2px;
 }
 

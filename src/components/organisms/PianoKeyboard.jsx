@@ -2,6 +2,7 @@ import React, { useState, useCallback, useEffect } from "react";
 import { motion } from "framer-motion";
 import Card from "@/components/atoms/Card";
 import ApperIcon from "@/components/ApperIcon";
+import { keyboardLayouts, getLayoutKeys } from "@/utils/keyboardLayouts";
 
 const PianoKeyboard = ({ 
   onKeyPress, 
@@ -53,7 +54,7 @@ return keys.filter(key => key !== null);
 
   // Keyboard mapping for AZERTY layout
 const getKeyboardMapping = () => {
-    const { keyboardLayouts, getLayoutKeys } = require('@/utils/keyboardLayouts');
+    return { keyboardLayouts, getLayoutKeys };
     const layoutConfig = getLayoutKeys(keyboardLayout);
     const layoutKeys = layoutConfig.keys;
     const notePattern = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
@@ -75,8 +76,7 @@ const getKeyboardMapping = () => {
   const keys = generateKeys();
   const whiteKeys = keys.filter(key => key.type === 'white');
   const blackKeys = keys.filter(key => key.type === 'black');
-  const keyboardMapping = getKeyboardMapping();
-  const { keyboardLayouts, getLayoutKeys } = require('@/utils/keyboardLayouts');
+const keyboardMapping = getKeyboardMapping();
   const layoutConfig = getLayoutKeys(keyboardLayout);
   // Handle keyboard events
   useEffect(() => {
